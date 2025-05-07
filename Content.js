@@ -1,16 +1,15 @@
 let cachedSelectors = [];
-
 chrome.storage.sync.get("fields", ({ fields }) => {
   if (!Array.isArray(fields)) return;
   cachedSelectors = fields.map(f => `input[${f.attr}="${f.value}"]`).join(',');
   applyHide();
 });
-
 function applyHide() {
   if (!cachedSelectors) return;
-
   try {
     const inputs = document.querySelectorAll(cachedSelectors);
+    console.log(cachedSelectors);
+    console.log(inputs);
     inputs.forEach(input => {
       input.style['-webkit-text-security'] = 'disc';
       input.placeholder = "Field has been hidden";
@@ -19,3 +18,6 @@ function applyHide() {
     console.warn("Selector error:", err);
   }
 }
+setInterval(() => {
+  applyHide();
+}, 1000);
